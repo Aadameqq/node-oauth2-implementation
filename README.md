@@ -8,7 +8,7 @@ Start mongodb, change the database url in the config file and then run those com
     npm i
     npm run dev
     
-### Clean Architecture
+### Dependency graphs
 
 #### Classes, interfaces and functions dependency graph. 
 Because the project contains many classes, functions, and interfaces, a graph including all of them is unreadable, so I made simplified and universal graph for each route.
