@@ -1,0 +1,3 @@
+interface IDefaultError {
+  getErrorCode: () => number;
+}
