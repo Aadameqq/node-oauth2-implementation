@@ -16,7 +16,7 @@ Because the project contains many classes, functions, and interfaces, a graph in
 ![img_1.png](img_1.png)
 
 #### Components dependency graph
-As you can see, all arrows are pointing up
+As you can see, when we set the components so that the least transient is at the top all the arrows are pointing up
 
 ![img_2.png](img_2.png)
 
