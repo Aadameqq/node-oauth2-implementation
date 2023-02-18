@@ -4,6 +4,7 @@
   "description": "",
   "main": "dist/infrastructure/server/server.js",
   "scripts": {
+    "test": "jest",
     "test:watch": "jest --watch",
     "test:unit:watch": "jest --watch --testNamePattern=\"(Unit test)\"",
     "test:coverage": "jest --coverage",
