@@ -27,7 +27,9 @@ export class AccountRepositoryMongodb
   };
 
   async create(accountEntity: Account) {
-    const accountFromDatabase = await new AccountModel(accountEntity).save();
+    const accountFromDatabase = (await new AccountModel(
+      accountEntity
+    ).save()) as any;
 
     const account = new Account(
       accountFromDatabase.id,

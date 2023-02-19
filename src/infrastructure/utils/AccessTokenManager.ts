@@ -5,7 +5,7 @@ import { ISignTokenManager } from "../../domain/interfaces/ISignTokenManager";
 import { IVerifyAndGetDataTokenManager } from "../../domain/interfaces/IVerifyAndGetDataTokenManager";
 import { Authorization } from "../../domain/entities/Authorization";
 
-const ACCESS_TOKEN_SECRET = "im secret";
+const { ACCESS_TOKEN_SECRET } = process.env;
 
 export class AccessTokenManager
   implements ISignTokenManager, IVerifyAndGetDataTokenManager
