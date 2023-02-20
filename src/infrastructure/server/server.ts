@@ -1,6 +1,7 @@
 import * as dotenv from "dotenv";
 import { createApp } from "./app";
 import { connectDatabase } from "./connect";
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 
 dotenv.config();
 

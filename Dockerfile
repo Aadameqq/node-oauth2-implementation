@@ -19,13 +19,14 @@ RUN addgroup --system --gid 1001 app
 RUN adduser --system --uid 1001 app
 
 COPY ./package*.json ./
+COPY ./swagger.json ./
 
 RUN npm ci
 
 USER app
 
-COPY --from=builder /home/app/dist ./
+COPY --from=builder /home/app/dist ./src
 
 EXPOSE 5000
 
-CMD ["node", "./infrastructure/server/server.js"]
+CMD ["node", "./src/infrastructure/server/server.js"]

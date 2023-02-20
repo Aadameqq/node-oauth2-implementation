@@ -1,0 +1,186 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Oauth2 provider api",
+    "version": "0.0.1"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5000/api/"
+    }
+  ],
+  "paths": {
+      "/app": {
+        "post": {
+          "summary": "Creates new oauth2 application",
+          "operationId": "createApp",
+          "tags": ["app"],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "token": {
+                      "type": "string",
+                      "description": "Token which you can get from /account/login route"
+                    }
+                  }
+                },
+                "example": {
+                  "name": "App name",
+                  "token": "sometoken"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "ownerId": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "The token you passed is not valid"
+            }
+          }
+        }
+      },
+    "/app/secret/{id}": {
+      "put": {
+        "summary": "Changes application secret",
+        "operationId": "changeAppSecret",
+        "tags": ["app"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "type": "string",
+                    "description": "Token which you can get from /account/login route"
+                  }
+                }
+              },
+              "example": {
+                "token": "sometoken"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "example": "my-app-id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          },
+          "401": {
+            "description": "The token you passed is not valid"
+          },
+          "400": {
+            "description": "App with given id does not exist"
+          }
+        }
+      }
+    },
+    "/app/{id}": {
+      "put": {
+        "summary": "Updates app with the data passed in request body",
+        "operationId": "updateApp",
+        "tags": ["app"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "type": "string",
+                    "description": "Token which you can get from /account/login route"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "redirectUri": {
+                    "type": "string"
+                  },
+                  "permissions": {
+                    "type": "array" // add schema
+                  }
+                }
+              },
+              "example": {
+                "token": "sometoken",
+                "name": "New App Name",
+                "redirectUri": "http://localhost:80/oauth-redirect",
+                "permissions": "read_acc_nickname"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "example": "my-app-id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          },
+          "401": {
+            "description": "The token you passed is not valid"
+          },
+          "400": {
+            "description": "App with given id does not exist"
+          }
+        }
+      }
+    }
+  },
+
+
+  "tags": [
+    {
+      "name": "account and auth",
+      "description": "Account management and authentication"
+    },
+    {
+      "name": "oauth",
+      "description": "Oauth2 protocol usage"
+    },
+    {
+      "name": "app",
+      "description": "Application management. Application allows you to use oauth2"
+    }
+  ]
+}
