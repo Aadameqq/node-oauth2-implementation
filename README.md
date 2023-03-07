@@ -10,7 +10,7 @@ I mainly focused on the architecture, which means I skipped validation or design
 
     docker-compose up
     
-Or tart mongodb, change the database url in the config file and then run those commands in a terminal
+Or start mongodb, change the database url in the config file and then run those commands in a terminal
 
     npm i
     npm run dev
