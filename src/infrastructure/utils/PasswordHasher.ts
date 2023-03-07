@@ -4,6 +4,8 @@ import bcrypt from "bcrypt";
 import { IHashPasswordHasher } from "../../domain/interfaces/IHashPasswordHasher";
 import { IComparePasswordHasher } from "../../domain/interfaces/IComparePasswordHasher";
 
+const { SALT_ROUNDS } = process.env;
+
 export class PasswordHasher
   implements IHashPasswordHasher, IComparePasswordHasher
 {
@@ -14,9 +16,7 @@ export class PasswordHasher
   };
 
   async hash(password: string): Promise<string> {
-    const saltRounds = 10;
-
-    const hash = await bcrypt.hash(password, saltRounds);
+    const hash = await bcrypt.hash(password, Number(SALT_ROUNDS));
 
     return hash;
   }

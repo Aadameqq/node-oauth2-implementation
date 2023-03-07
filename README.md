@@ -1,12 +1,17 @@
+⚠️ I decided to rework this project using the knowledge I've gained since finishing this app.
+Here you can find my second approach to creating oauth provider: https://github.com/Aadameqq/oauth-provider
+
 ## Simple oauth2 protocol implementation with Node.js and Typescript
 ### What is it?
 This is a simple application, in which I tried to follow principles and rules from the book "Clean Architecture".
+I mainly focused on the architecture, which means I skipped validation or designing a good api.
 
 ### Usage
 Start mongodb, change the database url in the config file and then run those commands in a terminal
 
     npm i
     npm run dev
+
     
 ### Dependency graphs
 

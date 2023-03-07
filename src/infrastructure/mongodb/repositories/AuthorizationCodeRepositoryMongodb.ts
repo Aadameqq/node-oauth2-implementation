@@ -11,9 +11,9 @@ export class AuthorizationCodeRepositoryMongodb
   async create(
     authorizationCodeEntity: AuthorizationCode
   ): Promise<AuthorizationCode> {
-    const authCodeFromDatabase = await new AuthCodeModel(
+    const authCodeFromDatabase = (await new AuthCodeModel(
       authorizationCodeEntity
-    ).save();
+    ).save()) as any;
 
     const authCode = new AuthorizationCode(
       authCodeFromDatabase.resourceOwnerId,

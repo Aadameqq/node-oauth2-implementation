@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-import { MONGO_DB_NAME, MONGO_URI } from "./config";
+
+const { MONGO_DB_NAME, MONGO_URI } = process.env;
 
 export const connectDatabase = () =>
   mongoose.connect(

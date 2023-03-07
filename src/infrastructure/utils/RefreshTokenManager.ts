@@ -3,7 +3,7 @@
 import jwt from "jsonwebtoken";
 import { ISignTokenManager } from "../../domain/interfaces/ISignTokenManager";
 
-const REFRESH_TOKEN_SECRET = "im refresh secret";
+const { REFRESH_TOKEN_SECRET } = process.env;
 
 export class RefreshTokenManager implements ISignTokenManager {
   sign(

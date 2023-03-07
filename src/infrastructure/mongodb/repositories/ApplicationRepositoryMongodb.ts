@@ -13,7 +13,7 @@ export class ApplicationRepositoryMongodb
     IUpdateSecretApplicationRepository
 {
   async create(app: App): Promise<App> {
-    const appFromDatabase = await new AppModel(app).save();
+    const appFromDatabase = (await new AppModel(app).save()) as any;
 
     const newApp = new App(
       appFromDatabase.id,
