@@ -7,7 +7,10 @@ This is a simple application, in which I tried to follow principles and rules fr
 I mainly focused on the architecture, which means I skipped validation or designing a good api.
 
 ### Usage
-Start mongodb, change the database url in the config file and then run those commands in a terminal
+
+    docker-compose up
+    
+Or tart mongodb, change the database url in the config file and then run those commands in a terminal
 
     npm i
     npm run dev
