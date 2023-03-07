@@ -10,7 +10,7 @@
     }
   ],
   "paths": {
-      "/app": {
+    "/app": {
         "post": {
           "summary": "Creates new oauth2 application",
           "operationId": "createApp",
@@ -80,12 +80,9 @@
                 "properties": {
                   "token": {
                     "type": "string",
-                    "description": "Token which you can get from /account/login route"
+                    "description": "Access token"
                   }
                 }
-              },
-              "example": {
-                "token": "sometoken"
               }
             }
           }
@@ -124,7 +121,7 @@
                 "properties": {
                   "token": {
                     "type": "string",
-                    "description": "Token which you can get from /account/login route"
+                    "description": "Access token"
                   },
                   "name": {
                     "type": "string"
@@ -133,12 +130,12 @@
                     "type": "string"
                   },
                   "permissions": {
-                    "type": "array" // add schema
+                    "$ref": "#/components/schemas/permissions"
                   }
                 }
               },
               "example": {
-                "token": "sometoken",
+                "token": "token",
                 "name": "New App Name",
                 "redirectUri": "http://localhost:80/oauth-redirect",
                 "permissions": "read_acc_nickname"
@@ -165,10 +162,284 @@
           }
         }
       }
+    },
+    "/account/register": {
+      "post": {
+        "summary": "Creates new account",
+        "operationId": "createAccount",
+        "tags": ["account and auth"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nickname": {
+                    "type": "string"
+                  },
+                  "mail": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "nickname": "MyNickname",
+                  "mail": "my@mail.domain",
+                  "password": "MyP4ssw0rd!"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation"
+          }
+        }
+      }
+    },
+    "/account/login": {
+      "post": {
+        "summary": "Returns access and refresh tokens. These tokens allow you to manage your account and applications",
+        "operationId": "authenticate",
+        "tags": ["account and auth"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nickname": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "nickname": "MyNickname",
+                  "password": "MyP4ssw0rd!"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "accessToken": {
+                      "type": "string"
+                    },
+                    "refreshToken": {
+                      "type": "string",
+                      "description": "Currently useless"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Passed credentials are incorrect"
+          }
+        }
+      }
+    },
+    "/account/nickname": {
+      "get": {
+        "summary": "Returns user's nickname",
+        "operationId": "getAccountNickname",
+        "tags": ["account and auth"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "description": "Access token",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "nickname":{
+                      "type": "string"
+                    }
+                  },
+                  "example": {
+                    "nickname": "MyNickname"
+                  }
+                }
+              }
+            },
+            "description": "Successful operation"
+          },
+          "401": {
+            "description": "Passed access token is invalid"
+          }
+        }
+      }
+    },
+    "/authorize/": {
+      "post": {
+        "summary": "Allows the user to grant application permissions and then returns the application redirect uri to which the user should be redirected.",
+        "operationId": "authorize",
+        "tags": ["oauth"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "description": "User's access token",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+          "in": "query",
+          "name": "redirect_uri",
+          "description": "Application redirect uri",
+          "schema": {
+            "type": "string"
+          }
+         },
+          {
+            "in": "query",
+            "name": "client_id",
+            "description": "Application id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "redirect":{
+                      "type": "object",
+                      "properties": {
+                        "uri": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "example": {
+                    "redirect": {
+                      "uri": "http://localhost:8000/redirect"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Successful operation"
+          },
+          "401": {
+            "description": "Passed access token or redirect uri is invalid"
+          },
+          "400": {
+            "description": "Application with given id does not exist"
+          }
+        }
+      }
+    },
+    "/oauth2/token": {
+      "get": {
+        "summary": "Exchanges the code for an access token that allows the manipulation of user data",
+        "operationId": "exchangeCode",
+        "tags": ["oauth"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "code",
+            "description": "Code with which the user was redirected to redirect uri",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "redirect_uri",
+            "description": "Application redirect uri",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "client_id",
+            "description": "Application id",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "client_secret",
+            "description": "Application secret",
+            "schema": {
+              "type": "string"
+            }
+          }
+
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "accessToken":{
+                      "type": "string"
+                    },
+                    "refreshToken":{
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Successful operation"
+          },
+          "404": {
+            "description": "App with given id does not exist"
+          },
+          "400": {
+            "description": "Passed app secret or redirect uri is invalid"
+          }
+        }
+      }
     }
   },
-
-
   "tags": [
     {
       "name": "account and auth",
@@ -182,5 +453,13 @@
       "name": "app",
       "description": "Application management. Application allows you to use oauth2"
     }
-  ]
+  ],
+  "components": {
+    "schemas": {
+      "permissions": {
+        "type": "string",
+        "enum": ["change_acc_nickname","read_acc_nickname"]
+      }
+    }
+  }
 }
